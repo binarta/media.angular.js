@@ -1,0 +1,23 @@
+{
+  "name": "binarta.media.angular",
+  "main": [
+    "./src/media.js",
+    "./less/media.less",
+    "./metadata-system.json"
+  ],
+  "dependencies": {
+    "angular": "1.3.*",
+    "binarta.i18n.angular": "0.*.*",
+    "binarta.toggle.edit.mode.angular": "1.*.*"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.3.*"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

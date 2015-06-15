@@ -1,0 +1,36 @@
+{
+  "msgs":{
+    "nl":{
+      "media.add.video.button": "Video toevoegen",
+      "media.youtube.link.input.label": "Plak hier een link van een YouTube video",
+      "media.youtube.preview.button": "Voorbeeld",
+      "media.youtube.link.invalid": "Ongeldige YouTube link.",
+      "media.youtube.show.player.controls.label": "Afspeelbediening weergeven",
+      "media.youtube.show.title.and.actions.label": "Videotitel en afspeelmogelijkheden weergeven"
+    },
+    "en":{
+      "media.video.add.button": "Add a video",
+      "media.youtube.link.input.label": "Paste a link to a YouTube video",
+      "media.youtube.preview.button": "Preview",
+      "media.youtube.link.invalid": "Invalid YouTube link.",
+      "media.youtube.show.player.controls.label": "Show player controls",
+      "media.youtube.show.title.and.actions.label": "Show video title and player actions"
+    },
+    "fr":{
+      "media.video.add.button": "Add a video",
+      "media.youtube.link.input.label": "Paste a link to a YouTube video",
+      "media.youtube.preview.button": "Aperçu",
+      "media.youtube.link.invalid": "Invalid YouTube link.",
+      "media.youtube.show.player.controls.label": "Afficher les commandes du lecteur",
+      "media.youtube.show.title.and.actions.label": "Afficher le titre de la vidéo et les actions du lecteur"
+    },
+    "de":{
+      "media.video.add.button": "Add a video",
+      "media.youtube.link.input.label": "Paste a link to a YouTube video",
+      "media.youtube.preview.button": "Vorschau",
+      "media.youtube.link.invalid": "Invalid YouTube link.",
+      "media.youtube.show.player.controls.label": "Player-Steuerelemente anzeigen",
+      "media.youtube.show.title.and.actions.label": "Videotitel und Player-Aktionen anzeigen"
+    }
+  }
+}
