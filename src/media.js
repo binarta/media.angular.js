@@ -102,7 +102,7 @@ function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer) {
                     '<div class="col-sm-6">' +
                     '<div class="form-group">' +
                     '<div class="bin-media-video-wrapper">' +
-                    '<iframe width="100%" ng-src="{{previewUrl}}" frameborder="0" allowfullscreen></iframe>' +
+                    '<iframe ng-src="{{previewUrl}}" frameborder="0" allowfullscreen></iframe>' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
