@@ -8,7 +8,7 @@ function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer) {
         template: '<div class="bin-media-video-wrapper" ng-if="url">' +
         '<iframe ng-src="{{url}}" frameborder="0" allowfullscreen></iframe>' +
         '</div>' +
-        '<button type="button" class="btn btn-default btn-block" ng-if="!url && editing" i18n code="media.add.video.button" read-only>{{var}}</button>',
+        '<span ng-if="!url && editing" i18n code="media.add.video.button" read-only>{{var}}</span>',
         link: function (scope, element, attrs) {
             i18n.resolve({
                 code: attrs.code,
