@@ -1,7 +1,7 @@
-angular.module('bin.media', ['i18n', 'toggle.edit.mode'])
-    .directive('binVideo', ['i18n', '$sce', 'editMode', 'editModeRenderer', BinVideoDirectiveFactory]);
+angular.module('bin.media', ['i18n', 'toggle.edit.mode', 'checkpoint'])
+    .directive('binVideo', ['i18n', '$sce', 'editMode', 'editModeRenderer', 'activeUserHasPermission', BinVideoDirectiveFactory]);
 
-function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer) {
+function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer, activeUserHasPermission) {
     return {
         restrict: ['E', 'A'],
         scope: true,
@@ -40,8 +40,32 @@ function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer) {
                 var rendererScope = angular.extend(scope.$new(), {
                     close: function () {
                         editModeRenderer.close();
+                    }
+                });
+
+                activeUserHasPermission({
+                    no: function () {
+                        userHasNoPermission();
                     },
-                    preview: function () {
+                    yes: function () {
+                        userHasPermission();
+                    }
+                }, 'video.config.update');
+
+
+                function userHasNoPermission () {
+                    editModeRenderer.open({
+                        template: '<form><p i18n code="media.video.unavailable.message" read-only>{{var}}</p></form>' +
+                        '<div class="dropdown-menu-buttons">' +
+                        '<a class="btn btn-success" href="https://binarta.com/applications" target="_blank" i18n code="media.video.upgrade.button" read-only>{{var}}</a>' +
+                        '<button type="reset" class="btn btn-default" ng-click="close()" i18n code="media.video.close.button" read-only>{{var}}</button>' +
+                        '</div>',
+                        scope: rendererScope
+                    });
+                }
+
+                function userHasPermission () {
+                    rendererScope.preview = function () {
                         if (rendererScope.youtubeUrl) rendererScope.yt.id = getYoutubeId(rendererScope.youtubeUrl);
 
                         if (rendererScope.yt.id) {
@@ -51,8 +75,9 @@ function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer) {
                             rendererScope.previewUrl = undefined;
                             rendererScope.violation = 'media.youtube.link.invalid';
                         }
-                    },
-                    submit: function () {
+                    };
+
+                    rendererScope.submit = function () {
                         i18n.translate({
                             code: attrs.code,
                             locale: 'default',
@@ -62,8 +87,9 @@ function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer) {
                             scope.url = createYoutubeUrl(rendererScope.yt);
                             rendererScope.close();
                         });
-                    },
-                    remove: function () {
+                    };
+
+                    rendererScope.remove = function () {
                         i18n.translate({
                             code: attrs.code,
                             locale: 'default',
@@ -73,70 +99,70 @@ function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer) {
                             scope.yt = undefined;
                             rendererScope.close();
                         });
+                    };
+
+                    if (scope.yt) rendererScope.yt = angular.copy(scope.yt);
+                    else rendererScope.yt = {titleAndActions: false};
+
+                    if(rendererScope.yt.playerControls == undefined) rendererScope.yt.playerControls = true;
+                    if(rendererScope.yt.titleAndActions == undefined) rendererScope.yt.titleAndActions = true;
+
+                    if (scope.url) rendererScope.previewUrl = angular.copy(scope.url);
+
+                    editModeRenderer.open({
+                        template: '<form>' +
+                        '<div class="form-group">' +
+                        '<label for="youtube-url" i18n code="media.youtube.link.input.label" read-only>{{var}}</label>' +
+                        '<div class="input-group">' +
+                        '<input type="text" id="youtube-url" class="form-control" ng-model="youtubeUrl">' +
+                        '<span class="input-group-btn">' +
+                        '<button type="submit" class="btn btn-success" ng-click="preview()" ng-disabled="!youtubeUrl" i18n code="media.youtube.preview.button" read-only>{{var}}</button>' +
+                        '</span>' +
+                        '</div>' +
+                        '<div class="help-block" ng-if="violation">' +
+                        '<span class="text-danger" i18n code="{{violation}}" read-only><i class="fa fa-exclamation-triangle"></i> {{var}}</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="row" ng-if="previewUrl">' +
+                        '<div class="col-sm-6">' +
+                        '<div class="form-group">' +
+                        '<div class="bin-media-video-wrapper">' +
+                        '<iframe ng-src="{{previewUrl}}" frameborder="0" allowfullscreen></iframe>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="col-sm-6">' +
+                        '<div class="form-group">' +
+                        '<div class="checkbox-switch">' +
+                        '<input type="checkbox" id="player-controls-switch" ng-model="yt.playerControls" ng-change="preview()">' +
+                        '<label for="player-controls-switch"></label>' +
+                        '<span i18n code="media.youtube.show.player.controls.label" read-only>{{var}}</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="checkbox-switch">' +
+                        '<div class="checkbox-switch">' +
+                        '<input type="checkbox" id="title-and-actions-switch" ng-model="yt.titleAndActions" ng-change="preview()">' +
+                        '<label for="title-and-actions-switch"></label>' +
+                        '<span i18n code="media.youtube.show.title.and.actions.label" read-only>{{var}}</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</form>' +
+                        '<div class="dropdown-menu-buttons">' +
+                        '<hr>' +
+                        '<button type="submit" class="btn btn-danger pull-left" ng-click="remove()" ng-if="url" i18n code="clerk.menu.remove.button" read-only>{{var}}</button>' +
+                        '<button type="submit" class="btn btn-success" ng-click="submit()" ng-if="previewUrl" i18n code="clerk.menu.save.button" read-only>{{var}}</button>' +
+                        '<button type="reset" class="btn btn-default" ng-click="close()" i18n code="clerk.menu.cancel.button" read-only>{{var}}</button>' +
+                        '</div>',
+                        scope: rendererScope
+                    });
+
+                    function getYoutubeId(url) {
+                        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                        var match = url.match(regExp);
+                        if (match && match[2].length == 11) return match[2];
                     }
-                });
-
-                if (scope.yt) rendererScope.yt = angular.copy(scope.yt);
-                else rendererScope.yt = {titleAndActions: false};
-
-                if(rendererScope.yt.playerControls == undefined) rendererScope.yt.playerControls = true;
-                if(rendererScope.yt.titleAndActions == undefined) rendererScope.yt.titleAndActions = true;
-
-                if (scope.url) rendererScope.previewUrl = angular.copy(scope.url);
-
-                editModeRenderer.open({
-                    template: '<form>' +
-                    '<div class="form-group">' +
-                    '<label for="youtube-url" i18n code="media.youtube.link.input.label" read-only>{{var}}</label>' +
-                    '<div class="input-group">' +
-                    '<input type="text" id="youtube-url" class="form-control" ng-model="youtubeUrl">' +
-                    '<span class="input-group-btn">' +
-                    '<button type="submit" class="btn btn-success" ng-click="preview()" ng-disabled="!youtubeUrl" i18n code="media.youtube.preview.button" read-only>{{var}}</button>' +
-                    '</span>' +
-                    '</div>' +
-                    '<div class="help-block" ng-if="violation">' +
-                    '<span class="text-danger" i18n code="{{violation}}" read-only><i class="fa fa-exclamation-triangle"></i> {{var}}</span>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row" ng-if="previewUrl">' +
-                    '<div class="col-sm-6">' +
-                    '<div class="form-group">' +
-                    '<div class="bin-media-video-wrapper">' +
-                    '<iframe ng-src="{{previewUrl}}" frameborder="0" allowfullscreen></iframe>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="col-sm-6">' +
-                    '<div class="form-group">' +
-                    '<div class="checkbox-switch">' +
-                    '<input type="checkbox" id="player-controls-switch" ng-model="yt.playerControls" ng-change="preview()">' +
-                    '<label for="player-controls-switch"></label>' +
-                    '<span i18n code="media.youtube.show.player.controls.label" read-only>{{var}}</span>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="checkbox-switch">' +
-                    '<div class="checkbox-switch">' +
-                    '<input type="checkbox" id="title-and-actions-switch" ng-model="yt.titleAndActions" ng-change="preview()">' +
-                    '<label for="title-and-actions-switch"></label>' +
-                    '<span i18n code="media.youtube.show.title.and.actions.label" read-only>{{var}}</span>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</form>' +
-                    '<div class="dropdown-menu-buttons">' +
-                    '<hr>' +
-                    '<button type="submit" class="btn btn-danger pull-left" ng-click="remove()" ng-if="url" i18n code="clerk.menu.remove.button" read-only>{{var}}</button>' +
-                    '<button type="submit" class="btn btn-success" ng-click="submit()" ng-if="previewUrl" i18n code="clerk.menu.save.button" read-only>{{var}}</button>' +
-                    '<button type="reset" class="btn btn-default" ng-click="close()" i18n code="clerk.menu.cancel.button" read-only>{{var}}</button>' +
-                    '</div>',
-                    scope: rendererScope
-                });
-
-                function getYoutubeId(url) {
-                    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-                    var match = url.match(regExp);
-                    if (match && match[2].length == 11) return match[2];
                 }
             }
         }

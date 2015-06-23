@@ -6,7 +6,10 @@
       "media.youtube.preview.button": "Voorbeeld",
       "media.youtube.link.invalid": "Ongeldige YouTube link.",
       "media.youtube.show.player.controls.label": "Afspeelbediening weergeven",
-      "media.youtube.show.title.and.actions.label": "Videotitel en afspeelmogelijkheden weergeven"
+      "media.youtube.show.title.and.actions.label": "Videotitel en afspeelmogelijkheden weergeven",
+      "media.video.unavailable.message": "Deze functionaliteit is beschikbaar vanaf een Essential abonnement.",
+      "media.video.close.button": "Sluiten",
+      "media.video.upgrade.button": "Upgraden"
     },
     "en":{
       "media.add.video.button": "Add a video",
@@ -14,7 +17,10 @@
       "media.youtube.preview.button": "Preview",
       "media.youtube.link.invalid": "Invalid YouTube link.",
       "media.youtube.show.player.controls.label": "Show player controls",
-      "media.youtube.show.title.and.actions.label": "Show video title and player actions"
+      "media.youtube.show.title.and.actions.label": "Show video title and player actions",
+      "media.video.unavailable.message": "This feature is available when you upgrade to an Essential subscription or higher.",
+      "media.video.close.button": "Close",
+      "media.video.upgrade.button": "Upgrade"
     },
     "fr":{
       "media.add.video.button": "Add a video",
@@ -22,7 +28,10 @@
       "media.youtube.preview.button": "Aperçu",
       "media.youtube.link.invalid": "Invalid YouTube link.",
       "media.youtube.show.player.controls.label": "Afficher les commandes du lecteur",
-      "media.youtube.show.title.and.actions.label": "Afficher le titre de la vidéo et les actions du lecteur"
+      "media.youtube.show.title.and.actions.label": "Afficher le titre de la vidéo et les actions du lecteur",
+      "media.video.unavailable.message": "This feature is available when you upgrade to an Essential subscription or higher.",
+      "media.video.close.button": "Fermer",
+      "media.video.upgrade.button": "Mise à niveau"
     },
     "de":{
       "media.add.video.button": "Add a video",
@@ -30,7 +39,10 @@
       "media.youtube.preview.button": "Vorschau",
       "media.youtube.link.invalid": "Invalid YouTube link.",
       "media.youtube.show.player.controls.label": "Player-Steuerelemente anzeigen",
-      "media.youtube.show.title.and.actions.label": "Videotitel und Player-Aktionen anzeigen"
+      "media.youtube.show.title.and.actions.label": "Videotitel und Player-Aktionen anzeigen",
+      "media.video.unavailable.message": "This feature is available when you upgrade to an Essential subscription or higher.",
+      "media.video.close.button": "Schließen",
+      "media.video.upgrade.button": "Upgraden"
     }
   }
 }
