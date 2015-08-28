@@ -7,7 +7,7 @@
       "media.youtube.link.invalid": "Ongeldige YouTube link.",
       "media.youtube.show.player.controls.label": "Afspeelbediening weergeven",
       "media.youtube.show.title.and.actions.label": "Videotitel en afspeelmogelijkheden weergeven",
-      "media.video.unavailable.message": "Deze functionaliteit is beschikbaar vanaf een Essential abonnement.",
+      "media.video.unavailable.message": "Upgrade your website to add a video.",
       "media.video.close.button": "Sluiten",
       "media.video.upgrade.button": "Upgraden"
     },
@@ -18,7 +18,7 @@
       "media.youtube.link.invalid": "Invalid YouTube link.",
       "media.youtube.show.player.controls.label": "Show player controls",
       "media.youtube.show.title.and.actions.label": "Show video title and player actions",
-      "media.video.unavailable.message": "This feature is available when you upgrade to an Essential subscription or higher.",
+      "media.video.unavailable.message": "Upgrade your website to add a video.",
       "media.video.close.button": "Close",
       "media.video.upgrade.button": "Upgrade"
     },
@@ -29,7 +29,7 @@
       "media.youtube.link.invalid": "Invalid YouTube link.",
       "media.youtube.show.player.controls.label": "Afficher les commandes du lecteur",
       "media.youtube.show.title.and.actions.label": "Afficher le titre de la vidéo et les actions du lecteur",
-      "media.video.unavailable.message": "This feature is available when you upgrade to an Essential subscription or higher.",
+      "media.video.unavailable.message": "Upgrade your website to add a video.",
       "media.video.close.button": "Fermer",
       "media.video.upgrade.button": "Mise à niveau"
     },
@@ -40,7 +40,7 @@
       "media.youtube.link.invalid": "Invalid YouTube link.",
       "media.youtube.show.player.controls.label": "Player-Steuerelemente anzeigen",
       "media.youtube.show.title.and.actions.label": "Videotitel und Player-Aktionen anzeigen",
-      "media.video.unavailable.message": "This feature is available when you upgrade to an Essential subscription or higher.",
+      "media.video.unavailable.message": "Upgrade your website to add a video.",
       "media.video.close.button": "Schließen",
       "media.video.upgrade.button": "Upgraden"
     }
