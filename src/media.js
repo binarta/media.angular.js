@@ -55,8 +55,8 @@ function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer, active
 
                 function userHasNoPermission () {
                     editModeRenderer.open({
-                        template: '<form><p i18n code="media.video.unavailable.message" read-only>{{var}}</p></form>' +
-                        '<div class="dropdown-menu-buttons">' +
+                        template: '<div class="bin-menu-edit-body"><p i18n code="media.video.unavailable.message" read-only>{{var}}</p></div>' +
+                        '<div class="bin-menu-edit-actions">' +
                         '<a class="btn btn-success" href="https://binarta.com/applications" target="_blank" i18n code="media.video.upgrade.button" read-only>{{var}}</a>' +
                         '<button type="reset" class="btn btn-default" ng-click="close()" i18n code="media.video.close.button" read-only>{{var}}</button>' +
                         '</div>',
@@ -110,7 +110,7 @@ function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer, active
                     if (scope.url) rendererScope.previewUrl = angular.copy(scope.url);
 
                     editModeRenderer.open({
-                        template: '<form>' +
+                        template: '<form class="bin-menu-edit-body">' +
                         '<div class="form-group">' +
                         '<label for="youtube-url" i18n code="media.youtube.link.input.label" read-only>{{var}}</label>' +
                         '<div class="input-group">' +
@@ -149,8 +149,7 @@ function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer, active
                         '</div>' +
                         '</div>' +
                         '</form>' +
-                        '<div class="dropdown-menu-buttons">' +
-                        '<hr>' +
+                        '<div class="bin-menu-edit-actions">' +
                         '<button type="submit" class="btn btn-danger pull-left" ng-click="remove()" ng-if="url" i18n code="clerk.menu.remove.button" read-only>{{var}}</button>' +
                         '<button type="submit" class="btn btn-success" ng-click="submit()" ng-if="previewUrl" i18n code="clerk.menu.save.button" read-only>{{var}}</button>' +
                         '<button type="reset" class="btn btn-default" ng-click="close()" i18n code="clerk.menu.cancel.button" read-only>{{var}}</button>' +
