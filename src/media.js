@@ -57,7 +57,7 @@ function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer, active
                     editModeRenderer.open({
                         template: '<div class="bin-menu-edit-body"><p i18n code="media.video.unavailable.message" read-only>{{var}}</p></div>' +
                         '<div class="bin-menu-edit-actions">' +
-                        '<a class="btn btn-success" href="https://binarta.com/applications" target="_blank" i18n code="media.video.upgrade.button" read-only>{{var}}</a>' +
+                        '<a class="btn btn-success pull-left" href="https://binarta.com/applications" target="_blank" i18n code="media.video.upgrade.button" read-only>{{var}}</a>' +
                         '<button type="reset" class="btn btn-default" ng-click="close()" i18n code="media.video.close.button" read-only>{{var}}</button>' +
                         '</div>',
                         scope: rendererScope
