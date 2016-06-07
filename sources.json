@@ -1,0 +1,5 @@
+{
+  "default": {
+    "media": "bower_components/binarta.media.angular/src/media.js"
+  }
+}
