@@ -1,11 +1,11 @@
 (function () {
-    angular.module('bin.media', ['i18n', 'toggle.edit.mode', 'checkpoint'])
-        .directive('binVideo', ['i18n', '$sce', 'editMode', 'editModeRenderer', 'activeUserHasPermission', BinVideoDirectiveFactory]);
+    angular.module('bin.media', ['i18n', 'toggle.edit.mode', 'checkpoint', 'notifications'])
+        .directive('binVideo', ['i18n', '$sce', 'editMode', 'editModeRenderer', 'activeUserHasPermission', 'ngRegisterTopicHandler', BinVideoDirectiveFactory]);
 
-    function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer, activeUserHasPermission) {
+    function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer, activeUserHasPermission, topics) {
         return {
             restrict: ['E', 'A'],
-            scope: true,
+            scope: {},
             template: '<div class="bin-media-video-wrapper" ng-if="url">' +
             '<iframe ng-src="{{url}}" frameborder="0" allowfullscreen></iframe>' +
             '</div>' +
@@ -29,6 +29,10 @@
                     if (args.titleAndActions == false) url += '&showinfo=0';
                     return $sce.trustAsResourceUrl(url);
                 }
+
+                topics(scope, 'edit.mode', function (editModeActive) {
+                    scope.editing = editModeActive;
+                });
 
                 editMode.bindEvent({
                     scope: scope,

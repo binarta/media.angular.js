@@ -3,9 +3,11 @@ describe('bin.media', function () {
     beforeEach(module('bin.media'));
 
     describe('bin-video directive', function () {
-        var element, html, scope, i18n, $compile, editMode, editModeRenderer, $sce, permitter;
+        var element, html, scope, i18n, $compile, editMode, editModeRenderer, $sce, permitter, topics;
 
-        beforeEach(inject(function ($rootScope, _$compile_, _i18n_, _editMode_, _editModeRenderer_, _$sce_, activeUserHasPermissionHelper) {
+        beforeEach(inject(function ($rootScope, _$compile_, _i18n_, _editMode_, _editModeRenderer_, _$sce_,
+                                    activeUserHasPermissionHelper, ngRegisterTopicHandler) {
+            topics = ngRegisterTopicHandler;
             $sce = _$sce_;
             permitter = activeUserHasPermissionHelper;
             $compile = _$compile_;
@@ -16,6 +18,27 @@ describe('bin.media', function () {
             html = '<bin-video code="my.movie"></bin-video>';
             element = angular.element(html);
         }));
+
+        it('register on edit mode event', function () {
+            $compile(element)(scope);
+
+            expect(topics.calls.mostRecent().args[0]).toEqual(element.isolateScope());
+            expect(topics.calls.mostRecent().args[1]).toEqual('edit.mode');
+        });
+
+        it('when not in edit mode', function () {
+            $compile(element)(scope);
+            topics.calls.mostRecent().args[2](false);
+
+            expect(element.isolateScope().editing).toBeFalsy();
+        });
+
+        it('when in edit mode', function () {
+            $compile(element)(scope);
+            topics.calls.mostRecent().args[2](true);
+
+            expect(element.isolateScope().editing).toBeTruthy();
+        });
 
         describe('with youtube params', function () {
             describe('default options', function () {
@@ -148,7 +171,7 @@ describe('bin.media', function () {
 
                     it('edit mode renderer is opened', function () {
                         expect(editModeRenderer.openSpy.template).toContain('media.video.unavailable.message');
-                        expect(rendererScope.$parent).toEqual(element.scope());
+                        expect(rendererScope.$parent).toEqual(element.isolateScope());
                     });
 
                     it('on close', function () {
@@ -176,8 +199,8 @@ describe('bin.media', function () {
             });
 
             it('put values on scope', function () {
-                expect(element.scope().yt).toEqual({id: 'ytid'});
-                expect($sce.getTrustedResourceUrl(element.scope().url)).toEqual('https://www.youtube-nocookie.com/embed/ytid?rel=0');
+                expect(element.isolateScope().yt).toEqual({id: 'ytid'});
+                expect($sce.getTrustedResourceUrl(element.isolateScope().url)).toEqual('https://www.youtube-nocookie.com/embed/ytid?rel=0');
             });
 
             it('template contains embed url', function () {
@@ -185,7 +208,7 @@ describe('bin.media', function () {
             });
 
             it('install editMode event binder', function () {
-                expect(editMode.bindEventSpy.scope).toEqual(element.scope());
+                expect(editMode.bindEventSpy.scope).toEqual(element.isolateScope());
                 expect(editMode.bindEventSpy.element).toEqual(element);
                 expect(editMode.bindEventSpy.permission).toEqual('i18n.message.add');
             });
@@ -205,7 +228,7 @@ describe('bin.media', function () {
 
                     it('edit mode renderer is opened', function () {
                         expect(editModeRenderer.openSpy.template).toEqual(jasmine.any(String));
-                        expect(rendererScope.$parent).toEqual(element.scope());
+                        expect(rendererScope.$parent).toEqual(element.isolateScope());
                     });
 
                     it('use initial url as preview url', function () {
@@ -318,7 +341,7 @@ describe('bin.media', function () {
                         });
 
                         it('update scope', function () {
-                            expect(element.scope().yt).toEqual(rendererScope.yt);
+                            expect(element.isolateScope().yt).toEqual(rendererScope.yt);
                         });
                     });
 
@@ -350,13 +373,13 @@ describe('bin.media', function () {
 
                         describe('with previous values', function () {
                             beforeEach(function () {
-                                element.scope().yt = {id:'test'};
+                                element.isolateScope().yt = {id:'test'};
                                 rendererScope.remove();
                                 scope.$digest();
                             });
 
                             it('remove youtube values on scope', function () {
-                                expect(element.scope().yt).toBeUndefined();
+                                expect(element.isolateScope().yt).toBeUndefined();
                             });
                         });
                     });
