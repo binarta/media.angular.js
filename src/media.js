@@ -16,11 +16,13 @@
                     locale: 'default',
                     default: '{}'
                 }).then(function (ctx) {
-                    ctx = JSON.parse(ctx);
-                    if (ctx.yt) {
-                        scope.yt = ctx.yt;
-                        scope.url = createYoutubeUrl(ctx.yt);
-                    }
+                    try {
+                        ctx = JSON.parse(ctx);
+                        if (ctx.yt) {
+                            scope.yt = ctx.yt;
+                            scope.url = createYoutubeUrl(ctx.yt);
+                        }
+                    } catch (e) {}
                 });
 
                 function createYoutubeUrl(args) {

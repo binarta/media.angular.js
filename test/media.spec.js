@@ -41,11 +41,38 @@ describe('bin.media', function () {
         });
 
         describe('with youtube params', function () {
+            [{
+                value: '',
+                name: 'empty'
+            }, {
+                value: ' ',
+                name: 'space'
+            }, {
+                value: 'test',
+                name: 'word'
+            }].forEach(function (args) {
+                describe('invalid response: ' + args.name, function () {
+                    beforeEach(function () {
+                        i18n.resolveResponse = args.value;
+                        $compile(element)(scope);
+                        scope.$digest();
+                    });
+
+                    it('no url', function () {
+                        expect(element.isolateScope().url).toBeUndefined();
+                    });
+                });
+            });
+
             describe('default options', function () {
                 beforeEach(function () {
                     i18n.resolveResponse = JSON.stringify({yt: {id: 'ytid'}});
                     $compile(element)(scope);
                     scope.$digest();
+                });
+
+                it('check url', function () {
+                    expect(element.isolateScope().url.toString()).toEqual('https://www.youtube-nocookie.com/embed/ytid?rel=0');
                 });
 
                 it('template contains embed url', function () {
