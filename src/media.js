@@ -4,7 +4,7 @@
 
     function BinVideoDirectiveFactory(i18n, $sce, editMode, editModeRenderer, activeUserHasPermission, topics) {
         return {
-            restrict: ['E', 'A'],
+            restrict: 'EA',
             scope: {},
             template: '<div class="bin-media-video-wrapper" ng-if="url">' +
             '<iframe ng-src="{{url}}" frameborder="0" allowfullscreen></iframe>' +
