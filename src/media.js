@@ -11,6 +11,8 @@
             '</div>' +
             '<span ng-if="!url && editing" i18n code="media.add.video.button" read-only>{{var}}</span>',
             link: function (scope, element, attrs) {
+                var legacyVideoString = '<iframe src="//www.youtube.com/embed/';
+
                 i18n.resolve({
                     code: attrs.code,
                     locale: 'default',
@@ -22,7 +24,9 @@
                             scope.yt = ctx.yt;
                             scope.url = createYoutubeUrl(ctx.yt);
                         }
-                    } catch (e) {}
+                    } catch (e) {
+                        if (isLegacyVideoString(ctx)) parseLegacyVideoString(ctx);
+                    }
                 });
 
                 function createYoutubeUrl(args) {
@@ -30,6 +34,17 @@
                     if (args.playerControls == false) url += '&controls=0';
                     if (args.titleAndActions == false) url += '&showinfo=0';
                     return $sce.trustAsResourceUrl(url);
+                }
+
+                function isLegacyVideoString(str) {
+                    return str.search(legacyVideoString) != -1;
+                }
+
+                function parseLegacyVideoString(str) {
+                    var start = str.indexOf(legacyVideoString) + legacyVideoString.length;
+                    var length = str.indexOf('"', start) - start;
+                    scope.yt = {id: str.substr(start, length)};
+                    scope.url = createYoutubeUrl(scope.yt);
                 }
 
                 topics(scope, 'edit.mode', function (editModeActive) {

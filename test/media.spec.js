@@ -149,6 +149,24 @@ describe('bin.media', function () {
                     expect(element[0].innerHTML).toContain('src="https://www.youtube-nocookie.com/embed/ytid?rel=0&amp;showinfo=0"');
                 });
             });
+
+            describe('with legacy response with url in text', function () {
+                var url;
+
+                beforeEach(function () {
+                    i18n.resolveResponse = '<p><iframe src="//www.youtube.com/embed/ytid" width="425" height="350"></iframe></p>';
+                    $compile(element)(scope);
+                    scope.$digest();
+                });
+
+                it('params are on scope', function () {
+                    expect(element.isolateScope().yt).toEqual({id: 'ytid'});
+                });
+
+                it('url is parsed', function () {
+                    expect(element.isolateScope().url.toString()).toEqual('https://www.youtube-nocookie.com/embed/ytid?rel=0');
+                });
+            });
         });
 
         describe('no previous values', function () {
