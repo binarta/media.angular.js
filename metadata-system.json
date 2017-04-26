@@ -23,13 +23,13 @@
       "media.video.upgrade.button": "Upgrade"
     },
     "fr":{
-      "media.add.video.button": "Add a video",
-      "media.youtube.link.input.label": "Paste a link to a YouTube video",
+      "media.add.video.button": "Ajouter une vidéo",
+      "media.youtube.link.input.label": "Coller un lien vers une vidéo YouTube",
       "media.youtube.preview.button": "Aperçu",
-      "media.youtube.link.invalid": "Invalid YouTube link.",
+      "media.youtube.link.invalid": "Lien YouTube invalide.",
       "media.youtube.show.player.controls.label": "Afficher les commandes du lecteur",
       "media.youtube.show.title.and.actions.label": "Afficher le titre de la vidéo et les actions du lecteur",
-      "media.video.unavailable.message": "Upgrade your website to add a video.",
+      "media.video.unavailable.message": "Mettez a niveau votre site web pour ajouter une vidéo.",
       "media.video.close.button": "Fermer",
       "media.video.upgrade.button": "Mise à niveau"
     },
