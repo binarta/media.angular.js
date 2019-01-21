@@ -167,6 +167,41 @@ describe('bin.media', function () {
                     expect(element.isolateScope().url.toString()).toEqual('https://www.youtube-nocookie.com/embed/ytid?rel=0');
                 });
             });
+
+            describe('with overlay rendering mode', function () {
+                beforeEach(function () {
+                    html = '<bin-video code="my.movie" mode="overlay"></bin-video>';
+                    element = angular.element(html);
+                    i18n.resolveResponse = JSON.stringify({yt: {id: 'ytid'}});
+                    $compile(element)(scope);
+                    scope.$digest();
+                });
+
+                it('check url', function () {
+                    expect(element.isolateScope().url.toString()).toEqual('https://www.youtube-nocookie.com/embed/ytid?rel=0');
+                });
+
+                it('the <bin-modal"/> is used', function () {
+                    expect(element[0].innerHTML).toContain('<bin-modal is-opened="status == \'viewing\'">');
+                });
+
+                it('overlay is currently collapsed', function () {
+                    expect(element.isolateScope().status).toEqual('collapsed');
+                });
+
+                it('the button to open the overlay is rendered', function () {
+                    expect(element[0].innerHTML).toContain('<a ng-click="view()">');
+                });
+
+                it('a helper tag is present to hook css fixes to', function () {
+                    expect(element[0].innerHTML).toContain('<div class="helper">');
+                });
+
+                it('when opening the overlay it is no longer collapsed', function () {
+                    element.isolateScope().view();
+                    expect(element.isolateScope().status).toEqual('viewing');
+                });
+            });
         });
 
         describe('no previous values', function () {
@@ -296,22 +331,22 @@ describe('bin.media', function () {
                             'http://youtu.be/Z9loMLJ9ADg',
                             'http://www.youtube.com/watch?v=Z9loMLJ9ADg',
                             'https://www.youtube.com/watch?v=Z9loMLJ9ADg&feature=g-all-xit'
-                        ].forEach(function(value) {
-                                describe('with valid youtube url: ' + value, function () {
-                                    beforeEach(function () {
-                                        rendererScope.youtubeUrl = value;
-                                        editModeRenderer.openSpy.scope.preview();
-                                    });
+                        ].forEach(function (value) {
+                            describe('with valid youtube url: ' + value, function () {
+                                beforeEach(function () {
+                                    rendererScope.youtubeUrl = value;
+                                    editModeRenderer.openSpy.scope.preview();
+                                });
 
-                                    it('filter out id', function () {
-                                        expect(rendererScope.yt.id).toEqual("Z9loMLJ9ADg");
-                                    });
+                                it('filter out id', function () {
+                                    expect(rendererScope.yt.id).toEqual("Z9loMLJ9ADg");
+                                });
 
-                                    it('get preview url', function () {
-                                        expect($sce.getTrustedResourceUrl(rendererScope.previewUrl)).toEqual("https://www.youtube-nocookie.com/embed/Z9loMLJ9ADg?rel=0");
-                                    });
+                                it('get preview url', function () {
+                                    expect($sce.getTrustedResourceUrl(rendererScope.previewUrl)).toEqual("https://www.youtube-nocookie.com/embed/Z9loMLJ9ADg?rel=0");
                                 });
                             });
+                        });
 
                         describe('with invalid youtube url', function () {
                             beforeEach(function () {
@@ -346,7 +381,7 @@ describe('bin.media', function () {
                         describe('no url', function () {
                             beforeEach(function () {
                                 rendererScope.yt = {
-                                    id:'test'
+                                    id: 'test'
                                 };
                                 editModeRenderer.openSpy.scope.preview();
                             });
@@ -360,7 +395,7 @@ describe('bin.media', function () {
                     describe('on submit', function () {
                         beforeEach(function () {
                             rendererScope.yt = {
-                                id:'newId',
+                                id: 'newId',
                                 playerControls: true,
                                 titleAndActions: true
                             };
@@ -418,7 +453,7 @@ describe('bin.media', function () {
 
                         describe('with previous values', function () {
                             beforeEach(function () {
-                                element.isolateScope().yt = {id:'test'};
+                                element.isolateScope().yt = {id: 'test'};
                                 rendererScope.remove();
                                 scope.$digest();
                             });
@@ -438,4 +473,5 @@ describe('bin.media', function () {
             });
         });
     });
-});
+})
+;
