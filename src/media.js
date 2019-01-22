@@ -12,7 +12,7 @@
                 '<a ng-click="view()">' +
                 '<i18n code="catalog.item.more.info.button" ng-bind="var"></i18n>' +
                 '</a>' +
-                '<bin-modal is-opened="status == \'viewing\'">' +
+                '<bin-modal is-opened="status == \'viewing\'" ng-click="close()">' +
                 '<div class="helper">' +
                 '<iframe ng-src="{{url}}" frameborder="0" allowfullscreen></iframe>' +
                 '</div>' +
@@ -23,10 +23,13 @@
             link: function (scope, element, attrs) {
                 var legacyVideoString = '<iframe src="//www.youtube.com/embed/';
                 scope.mode = attrs.mode || 'inline';
-                scope.status = 'collapsed';
                 scope.view = function() {
                     scope.status = 'viewing';
                 };
+                scope.close = function() {
+                    scope.status = 'collapsed';
+                };
+                scope.close();
 
                 i18n.resolve({
                     code: attrs.code,

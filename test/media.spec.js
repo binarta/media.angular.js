@@ -182,7 +182,7 @@ describe('bin.media', function () {
                 });
 
                 it('the <bin-modal"/> is used', function () {
-                    expect(element[0].innerHTML).toContain('<bin-modal is-opened="status == \'viewing\'">');
+                    expect(element[0].innerHTML).toContain('<bin-modal is-opened="status == \'viewing\'" ng-click="close()">');
                 });
 
                 it('overlay is currently collapsed', function () {
@@ -197,9 +197,19 @@ describe('bin.media', function () {
                     expect(element[0].innerHTML).toContain('<div class="helper">');
                 });
 
-                it('when opening the overlay it is no longer collapsed', function () {
-                    element.isolateScope().view();
-                    expect(element.isolateScope().status).toEqual('viewing');
+                describe('when opening the overlay', function() {
+                    beforeEach(function() {
+                        element.isolateScope().view();
+                    });
+
+                    it('it is no longer collapsed', function () {
+                        expect(element.isolateScope().status).toEqual('viewing');
+                    });
+
+                    it('the overlay can be closed', function () {
+                        element.isolateScope().close();
+                        expect(element.isolateScope().status).toEqual('collapsed');
+                    });
                 });
             });
         });
