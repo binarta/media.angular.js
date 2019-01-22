@@ -2,9 +2,9 @@
   "msgs":{
     "nl":{
       "media.add.video.button": "Video toevoegen",
-      "media.youtube.link.input.label": "Plak hier een link van een YouTube video",
+      "media.youtube.link.input.label": "Plak hier een link van een YouTube of Vimeo video",
       "media.youtube.preview.button": "Voorbeeld",
-      "media.youtube.link.invalid": "Ongeldige YouTube link.",
+      "media.youtube.link.invalid": "Ongeldige link.",
       "media.youtube.show.player.controls.label": "Afspeelbediening weergeven",
       "media.youtube.show.title.and.actions.label": "Videotitel en afspeelmogelijkheden weergeven",
       "media.video.unavailable.message": "Upgrade jouw website om een video te kunnen toevoegen.",
@@ -13,9 +13,9 @@
     },
     "en":{
       "media.add.video.button": "Add a video",
-      "media.youtube.link.input.label": "Paste a link to a YouTube video",
+      "media.youtube.link.input.label": "Paste a link to a YouTube or Vimeo video",
       "media.youtube.preview.button": "Preview",
-      "media.youtube.link.invalid": "Invalid YouTube link.",
+      "media.youtube.link.invalid": "Invalid link.",
       "media.youtube.show.player.controls.label": "Show player controls",
       "media.youtube.show.title.and.actions.label": "Show video title and player actions",
       "media.video.unavailable.message": "Upgrade your website to add a video.",
@@ -24,9 +24,9 @@
     },
     "fr":{
       "media.add.video.button": "Ajouter une vidéo",
-      "media.youtube.link.input.label": "Coller un lien vers une vidéo YouTube",
+      "media.youtube.link.input.label": "Coller un lien vers une vidéo YouTube ou Vimeo",
       "media.youtube.preview.button": "Aperçu",
-      "media.youtube.link.invalid": "Lien YouTube invalide.",
+      "media.youtube.link.invalid": "Lien invalide.",
       "media.youtube.show.player.controls.label": "Afficher les commandes du lecteur",
       "media.youtube.show.title.and.actions.label": "Afficher le titre de la vidéo et les actions du lecteur",
       "media.video.unavailable.message": "Mettez a niveau votre site web pour ajouter une vidéo.",
@@ -35,9 +35,9 @@
     },
     "de":{
       "media.add.video.button": "Add a video",
-      "media.youtube.link.input.label": "Paste a link to a YouTube video",
+      "media.youtube.link.input.label": "Paste a link to a YouTube or Vimeo video",
       "media.youtube.preview.button": "Vorschau",
-      "media.youtube.link.invalid": "Invalid YouTube link.",
+      "media.youtube.link.invalid": "Invalid link.",
       "media.youtube.show.player.controls.label": "Player-Steuerelemente anzeigen",
       "media.youtube.show.title.and.actions.label": "Videotitel und Player-Aktionen anzeigen",
       "media.video.unavailable.message": "Upgrade your website to add a video.",

@@ -80,6 +80,22 @@ describe('bin.media', function () {
                 });
             });
 
+            describe('vimeo support with default options', function () {
+                beforeEach(function () {
+                    i18n.resolveResponse = JSON.stringify({yt: {id: 'vimeoid', platform: 'vimeo'}});
+                    $compile(element)(scope);
+                    scope.$digest();
+                });
+
+                it('check url', function () {
+                    expect(element.isolateScope().url.toString()).toEqual('https://player.vimeo.com/video/vimeoid?rel=0');
+                });
+
+                it('template contains embed url', function () {
+                    expect(element[0].innerHTML).toContain('src="https://player.vimeo.com/video/vimeoid?rel=0"');
+                });
+            });
+
             describe('all options enabled', function () {
                 beforeEach(function () {
                     i18n.resolveResponse = JSON.stringify({
@@ -95,6 +111,25 @@ describe('bin.media', function () {
 
                 it('template contains embed url', function () {
                     expect(element[0].innerHTML).toContain('src="https://www.youtube-nocookie.com/embed/ytid?rel=0"');
+                });
+            });
+
+            describe('vimeo support with all options enabled', function () {
+                beforeEach(function () {
+                    i18n.resolveResponse = JSON.stringify({
+                        yt: {
+                            id: 'vimeoid',
+                            playerControls: true,
+                            titleAndActions: true,
+                            platform: 'vimeo'
+                        }
+                    });
+                    $compile(element)(scope);
+                    scope.$digest();
+                });
+
+                it('template contains embed url', function () {
+                    expect(element[0].innerHTML).toContain('src="https://player.vimeo.com/video/vimeoid?rel=0"');
                 });
             });
 
@@ -116,6 +151,25 @@ describe('bin.media', function () {
                 });
             });
 
+            describe('vimeo support with all options disabled', function () {
+                beforeEach(function () {
+                    i18n.resolveResponse = JSON.stringify({
+                        yt: {
+                            id: 'vimeoid',
+                            playerControls: false,
+                            titleAndActions: false,
+                            platform: 'vimeo'
+                        }
+                    });
+                    $compile(element)(scope);
+                    scope.$digest();
+                });
+
+                it('template contains embed url', function () {
+                    expect(element[0].innerHTML).toContain('src="https://player.vimeo.com/video/vimeoid?rel=0&amp;controls=0&amp;title=0"');
+                });
+            });
+
             describe('player controls disabled', function () {
                 beforeEach(function () {
                     i18n.resolveResponse = JSON.stringify({
@@ -133,6 +187,24 @@ describe('bin.media', function () {
                 });
             });
 
+            describe('vimeo support with player controls disabled', function () {
+                beforeEach(function () {
+                    i18n.resolveResponse = JSON.stringify({
+                        yt: {
+                            id: 'vimeoid',
+                            playerControls: false,
+                            platform: 'vimeo'
+                        }
+                    });
+                    $compile(element)(scope);
+                    scope.$digest();
+                });
+
+                it('template contains embed url', function () {
+                    expect(element[0].innerHTML).toContain('src="https://player.vimeo.com/video/vimeoid?rel=0&amp;controls=0"');
+                });
+            });
+
             describe('title and actions disabled', function () {
                 beforeEach(function () {
                     i18n.resolveResponse = JSON.stringify({
@@ -147,6 +219,24 @@ describe('bin.media', function () {
 
                 it('template contains embed url', function () {
                     expect(element[0].innerHTML).toContain('src="https://www.youtube-nocookie.com/embed/ytid?rel=0&amp;showinfo=0"');
+                });
+            });
+
+            describe('vimeo support with title and actions disabled', function () {
+                beforeEach(function () {
+                    i18n.resolveResponse = JSON.stringify({
+                        yt: {
+                            id: 'vimeoid',
+                            titleAndActions: false,
+                            platform: 'vimeo'
+                        }
+                    });
+                    $compile(element)(scope);
+                    scope.$digest();
+                });
+
+                it('template contains embed url', function () {
+                    expect(element[0].innerHTML).toContain('src="https://player.vimeo.com/video/vimeoid?rel=0&amp;title=0"');
                 });
             });
 
@@ -197,8 +287,8 @@ describe('bin.media', function () {
                     expect(element[0].innerHTML).toContain('<div class="helper">');
                 });
 
-                describe('when opening the overlay', function() {
-                    beforeEach(function() {
+                describe('when opening the overlay', function () {
+                    beforeEach(function () {
                         element.isolateScope().view();
                     });
 
@@ -352,6 +442,10 @@ describe('bin.media', function () {
                                     expect(rendererScope.yt.id).toEqual("Z9loMLJ9ADg");
                                 });
 
+                                it('set platform', function () {
+                                    expect(rendererScope.yt.platform).toEqual("youtube");
+                                });
+
                                 it('get preview url', function () {
                                     expect($sce.getTrustedResourceUrl(rendererScope.previewUrl)).toEqual("https://www.youtube-nocookie.com/embed/Z9loMLJ9ADg?rel=0");
                                 });
@@ -482,6 +576,130 @@ describe('bin.media', function () {
                 });
             });
         });
+
+        describe('vimeo support with default youtube params', function () {
+            beforeEach(function () {
+                i18n.resolveResponse = JSON.stringify({yt: {id: 'vimeoid', platform: 'vimeo'}});
+                $compile(element)(scope);
+                scope.$digest();
+            });
+
+            it('put values on scope', function () {
+                expect(element.isolateScope().yt).toEqual({id: 'vimeoid', platform: 'vimeo'});
+                expect($sce.getTrustedResourceUrl(element.isolateScope().url)).toEqual('https://player.vimeo.com/video/vimeoid?rel=0');
+            });
+
+            it('template contains embed url', function () {
+                expect(element[0].innerHTML).toContain('src="https://player.vimeo.com/video/vimeoid?rel=0"');
+            });
+
+            describe('on edit renderer opened', function () {
+                var rendererScope;
+
+                beforeEach(function () {
+                    editMode.bindEventSpy.onClick();
+                });
+
+                describe('and user has permission', function () {
+                    beforeEach(function () {
+                        permitter.yes();
+                        rendererScope = editModeRenderer.openSpy.scope;
+                    });
+
+                    it('use initial url as preview url', function () {
+                        expect($sce.getTrustedResourceUrl(rendererScope.previewUrl)).toEqual("https://player.vimeo.com/video/vimeoid?rel=0");
+                    });
+
+                    describe('on preview', function () {
+                        [
+                            'https://vimeo.com/172825105'
+                        ].forEach(function (value) {
+                            describe('with valid vimeo url: ' + value, function () {
+                                beforeEach(function () {
+                                    rendererScope.youtubeUrl = value;
+                                    editModeRenderer.openSpy.scope.preview();
+                                });
+
+                                it('filter out id', function () {
+                                    expect(rendererScope.yt.id).toEqual("172825105");
+                                });
+
+                                it('set platform', function () {
+                                    expect(rendererScope.yt.platform).toEqual("vimeo");
+                                });
+
+                                it('get preview url', function () {
+                                    expect($sce.getTrustedResourceUrl(rendererScope.previewUrl)).toEqual("https://player.vimeo.com/video/172825105?rel=0");
+                                });
+                            });
+                        });
+                    });
+
+                    describe('on submit', function () {
+                        beforeEach(function () {
+                            rendererScope.yt = {
+                                id: '172825105',
+                                playerControls: true,
+                                titleAndActions: true,
+                                platform: 'vimeo'
+                            };
+
+                            rendererScope.submit();
+                            scope.$digest();
+                        });
+
+                        it('update template embed url', function () {
+                            expect(element[0].innerHTML).toContain('src="https://player.vimeo.com/video/172825105?rel=0"');
+                        });
+                    });
+
+                    describe('on remove', function () {
+                        beforeEach(function () {
+                            rendererScope.remove();
+                            scope.$digest();
+                        });
+
+                        it('persisted message is deleted', function () {
+                            expect(i18n.translateSpy).toEqual({
+                                code: 'my.movie',
+                                locale: 'default',
+                                translation: '{}'
+                            });
+                        });
+
+                        it('update template embed url', function () {
+                            expect(scope.url).toBeUndefined();
+                        });
+
+                        it('template does not contain embed url', function () {
+                            expect(element[0].innerHTML).not.toContain('src');
+                        });
+
+                        it('edit mode renderer is closed', function () {
+                            expect(editModeRenderer.close).toHaveBeenCalled();
+                        });
+
+                        describe('with previous values', function () {
+                            beforeEach(function () {
+                                element.isolateScope().yt = {id: 'test'};
+                                rendererScope.remove();
+                                scope.$digest();
+                            });
+
+                            it('remove youtube values on scope', function () {
+                                expect(element.isolateScope().yt).toBeUndefined();
+                            });
+                        });
+                    });
+
+                    it('on close', function () {
+                        rendererScope.close();
+
+                        expect(editModeRenderer.close).toHaveBeenCalled();
+                    });
+                });
+            });
+        })
     });
 })
 ;

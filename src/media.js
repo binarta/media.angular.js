@@ -23,10 +23,10 @@
             link: function (scope, element, attrs) {
                 var legacyVideoString = '<iframe src="//www.youtube.com/embed/';
                 scope.mode = attrs.mode || 'inline';
-                scope.view = function() {
+                scope.view = function () {
                     scope.status = 'viewing';
                 };
-                scope.close = function() {
+                scope.close = function () {
                     scope.status = 'collapsed';
                 };
                 scope.close();
@@ -37,15 +37,57 @@
                     default: '{}'
                 }).then(function (ctx) {
                     try {
-                        ctx = JSON.parse(ctx);
-                        if (ctx.yt) {
-                            scope.yt = ctx.yt;
-                            scope.url = createYoutubeUrl(ctx.yt);
+                        var video = create(JSON.parse(ctx));
+                        if (video.exists) {
+                            scope.yt = video.toContext();
+                            scope.url = video.toUrl();
                         }
                     } catch (e) {
                         if (isLegacyVideoString(ctx)) parseLegacyVideoString(ctx);
                     }
                 });
+
+                function create(args) {
+                    if (!args.yt || !args.yt.id)
+                        return new NULLVideo();
+                    if (args.yt.platform == 'vimeo')
+                        return new VimeoVideo(args.yt);
+                    return new YoutubeVideo(args.yt);
+                }
+
+                function NULLVideo() {
+                }
+
+                function YoutubeVideo(args) {
+                    var self = this;
+
+                    self.exists = true;
+
+                    self.toContext = function () {
+                        return args;
+                    };
+
+                    self.toUrl = function () {
+                        return createYoutubeUrl(args);
+                    }
+                }
+
+                function VimeoVideo(args) {
+                    var self = this;
+
+                    self.exists = true;
+
+                    self.toContext = function () {
+                        return args;
+                    };
+
+                    self.toUrl = function () {
+                        var url = 'https://player.vimeo.com/video/' + args.id + '?rel=0';
+                        if (args.playerControls == false) url += '&controls=0';
+                        if (args.titleAndActions == false) url += '&title=0';
+                        return $sce.trustAsResourceUrl(url);
+                    }
+                }
 
                 function createYoutubeUrl(args) {
                     var url = 'https://www.youtube-nocookie.com/embed/' + args.id + '?rel=0';
@@ -61,8 +103,11 @@
                 function parseLegacyVideoString(str) {
                     var start = str.indexOf(legacyVideoString) + legacyVideoString.length;
                     var length = str.indexOf('"', start) - start;
-                    scope.yt = {id: str.substr(start, length)};
-                    scope.url = createYoutubeUrl(scope.yt);
+                    var video = create({yt: {id: str.substr(start, length)}});
+                    if (video.exists) {
+                        scope.yt = video.toContext();
+                        scope.url = video.toUrl();
+                    }
                 }
 
                 topics(scope, 'edit.mode', function (editModeActive) {
@@ -93,7 +138,7 @@
                     }, 'video.config.update');
 
 
-                    function userHasNoPermission () {
+                    function userHasNoPermission() {
                         editModeRenderer.open({
                             template: '<div class="bin-menu-edit-body"><p i18n code="media.video.unavailable.message" read-only>{{var}}</p></div>' +
                                 '<div class="bin-menu-edit-actions">' +
@@ -104,12 +149,21 @@
                         });
                     }
 
-                    function userHasPermission () {
+                    function userHasPermission() {
                         rendererScope.preview = function () {
-                            if (rendererScope.youtubeUrl) rendererScope.yt.id = getYoutubeId(rendererScope.youtubeUrl);
+                            if (rendererScope.youtubeUrl) {
+                                rendererScope.yt.id = getYoutubeId(rendererScope.youtubeUrl);
+                                rendererScope.yt.platform = 'youtube';
+                            }
+                            if (!rendererScope.yt.id) {
+                                rendererScope.yt.id = getVimeoId(rendererScope.youtubeUrl);
+                                if (rendererScope.yt.id)
+                                    rendererScope.yt.platform = 'vimeo';
+                            }
 
-                            if (rendererScope.yt.id) {
-                                rendererScope.previewUrl = createYoutubeUrl(rendererScope.yt);
+                            var video = create(rendererScope);
+                            if (video.exists) {
+                                rendererScope.previewUrl = video.toUrl();
                                 rendererScope.violation = undefined;
                             } else {
                                 rendererScope.previewUrl = undefined;
@@ -123,8 +177,9 @@
                                 locale: 'default',
                                 translation: JSON.stringify({yt: rendererScope.yt})
                             }).then(function () {
-                                scope.yt = rendererScope.yt;
-                                scope.url = createYoutubeUrl(rendererScope.yt);
+                                var video = create(rendererScope);
+                                scope.yt = video.toContext();
+                                scope.url = video.toUrl();
                                 rendererScope.close();
                             });
                         };
@@ -144,8 +199,8 @@
                         if (scope.yt) rendererScope.yt = angular.copy(scope.yt);
                         else rendererScope.yt = {titleAndActions: false};
 
-                        if(rendererScope.yt.playerControls == undefined) rendererScope.yt.playerControls = true;
-                        if(rendererScope.yt.titleAndActions == undefined) rendererScope.yt.titleAndActions = true;
+                        if (rendererScope.yt.playerControls == undefined) rendererScope.yt.playerControls = true;
+                        if (rendererScope.yt.titleAndActions == undefined) rendererScope.yt.titleAndActions = true;
 
                         if (scope.url) rendererScope.previewUrl = angular.copy(scope.url);
 
@@ -201,6 +256,14 @@
                             var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
                             var match = url.match(regExp);
                             if (match && match[2].length == 11) return match[2];
+                        }
+
+                        function getVimeoId(url) {
+                            // https://vimeo.com/172825105
+                            var regExp = /^.*vimeo.com\/(\d+).*/;
+                            var match = url.match(regExp);
+                            if (match && match[1])
+                                return match[1];
                         }
                     }
                 }
