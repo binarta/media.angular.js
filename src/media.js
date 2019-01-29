@@ -6,15 +6,19 @@
         return {
             restrict: 'EA',
             scope: {},
-            template: '<div class="bin-media-video-wrapper" ng-if="url">' +
-                '<iframe ng-if="mode == \'inline\'" ng-src="{{url}}" frameborder="0" allowfullscreen></iframe>' +
+            template: '<div ng-if="url">' +
+                '<div class="bin-media-video-wrapper" ng-if="mode == \'inline\'">' +
+                '<iframe ng-src="{{url}}" frameborder="0" allowfullscreen></iframe>' +
+                '</div>' +
                 '<div ng-if="mode == \'overlay\'">' +
                 '<a ng-click="view()">' +
                 '<i18n code="catalog.item.more.info.button" ng-bind="var"></i18n>' +
                 '</a>' +
                 '<bin-modal is-opened="status == \'viewing\'" ng-click="close()">' +
                 '<div class="helper">' +
+                '<div class="bin-media-video-wrapper">' +
                 '<iframe ng-src="{{url}}" frameborder="0" allowfullscreen></iframe>' +
+                '</div>' +
                 '</div>' +
                 '</bin-modal>' +
                 '</div>' +
