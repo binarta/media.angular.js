@@ -12,7 +12,7 @@
                 '</div>' +
                 '<div ng-if="mode == \'overlay\'">' +
                 '<a ng-click="view()">' +
-                '<i18n code="catalog.item.more.info.button" ng-bind="var"></i18n>' +
+                '<i18n code="catalog.item.more.info.button"><i class="fa fa-play-circle-o"></i> {{var}}</i18n>' +
                 '</a>' +
                 '<bin-modal is-opened="status == \'viewing\'" ng-click="close()">' +
                 '<div class="helper">' +
